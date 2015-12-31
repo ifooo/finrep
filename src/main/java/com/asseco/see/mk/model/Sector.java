@@ -11,22 +11,22 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+
 @Entity
-@Table(name="sectors")
-public class Sector implements Serializable{
+@Table(name = "sectors")
+public class Sector implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	
-	@Column(name="sector")
+	private Long id;
+
+	@Column(name = "sector")
 	private String sector;
-	
-	public Sector(){
-		
+
+	public Sector() {
+
 	}
 
 	public String getSector() {
@@ -37,9 +37,14 @@ public class Sector implements Serializable{
 		this.sector = sector;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(id).append(sector).toHashCode();
@@ -58,8 +63,7 @@ public class Sector implements Serializable{
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this).append("id", this.id).append("sector", this.sector).toString();
+		return "id: " + id + "sector: " + sector;
 	}
-
 
 }

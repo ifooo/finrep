@@ -21,17 +21,17 @@ public class Project implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 
-	@Column(name = "projects")
+	@Column(name = "project")
 	private String project;
 
 	public Project() {
 	}
 
-	public Project(String project) {
-		this.project = project;
-	}
+//	public Project(String project) {
+//		this.project = project;
+//	}
 
 	public String getProject() {
 		return project;
@@ -39,6 +39,14 @@ public class Project implements Serializable {
 
 	public void setProject(String project) {
 		this.project = project;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<title>Financial Reporter</title>
+<link type="text/css" rel="stylesheet"
+	href="/../../css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+<link type="text/css" rel="stylesheet"
+	href="/../../css/jquery-ui.min.css" th:href="@{css/jquery-ui.min.css}" />
+<script src="/../../css/jquery-1.11.3.min.js"
+	th:src="@{css/jquery-1.11.3.min.js}"></script>
+<script src="/../../css/bootstrap.min.js"
+	th:src="@{css/bootstrap.min.js}"></script>
+<script src="/../../css/jquery-ui.min.js"
+	th:src="@{css/jquery-ui.min.js}"></script>
+
+
+
+<style>
+body {
+	padding-top: 70px;
+	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.ui-datepicker-calendar {
+	display: none;
+}
+</style>
+</head>
+<body>
+	<div th:include="fragments/navbar :: navigation_bar"></div>
+
+	<div class="container">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Clients</th>
+					<th>Sectors</th>
+					<th>Projects</th>
+					<th>Sales Person</th>
+					<th>Plan Date</th>
+					<th>Plan Cogs</th>
+					<th>Plan Opex</th>
+					<th>Provision Cost Date</th>
+					<th>Provision Cost Cogs</th>
+					<th>Provision Cost Opex</th>
+					<th>Closing Provsion Date</th>
+					<th>Closing Provsion Cogs</th>
+					<th>Closing Provsion Opex</th>
+					<th>Status</th>
+					<th>Rem amo cogs</th>
+					<th>Rem amo opex</th>
+				</tr>
+			</thead>
+			<th:block th:each="res : ${reservations}">
+				<tr>
+					<td th:text="${res.client.client}">A Smoke Test'</td>
+					<td th:text="${res.sectorr.sector}">A Smoke Test'</td>
+					<td th:text="${res.project.project}"></td>
+					<td th:text="${res.seller.seller}">A Smoke Test'</td>
+					<td th:text="${res.pDate}">A Smoke Test'</td>
+					<td th:text="${res.pCogs}">A Smoke Test'</td>
+					<td th:text="${res.pOpex}">A Smoke Test'</td>
+					<td th:text="${res.provCostDate}">A Smoke Test'</td>
+					<td th:text="${res.provCostCogs}">A Smoke Test'</td>
+					<td th:text="${res.provCostOpex}">A Smoke Test'</td>
+					<td th:text="${res.closingProvisionDate}">A Smoke Test'</td>
+					<td th:text="${res.closingProvisionCogs}">A Smoke Test'</td>
+					<td th:text="${res.closingProvisionOpex}">A Smoke Test'</td>
+					<td th:text="${res.status.status}">A Smoke Test'</td>
+					<td th:text="${res.remAmountCogs}">A Smoke Test'</td>
+					<td th:text="${res.remAmountOpex}">A Smoke Test'</td>
+
+
+				</tr>
+			</th:block>
+		</table>
+
+
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+			data-target="#myModal">Add Reservation</button>
+
+
+		<!-- Modal -->
+		<div id="myModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 class="modal-title">New Reservation</h2>
+					</div>
+					<div class="modal-body">
+
+						<form action="#" th:action="@{/process_res_form}"
+							th:object="${reservation}" method="post">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Sector</h4>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-md-12">
+									<select th:field="*{sectorr.id}"
+										style="width: 175px; height: 27px">
+										<option value="">Select</option>
+										<option th:each="sector : ${sectors}" th:value="${sector.id}"
+											th:text="${sector.sector}">Sector</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Client</h4>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<select th:field="*{client.id}"
+										style="width: 175px; height: 27px">
+										<option value="">Select</option>
+										<option th:each="client : ${clients}" th:value="${client.id}"
+											th:text="${client.client}">Client</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Project</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<select th:field="*{project.id}"
+										style="width: 175px; height: 27px">
+										<option value="">Select</option>
+										<option th:each="project : ${projects}"
+											th:value="${project.id}" th:text="${project.project}">Project</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Sales Person</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<select th:field="*{seller.id}"
+										style="width: 175px; height: 27px">
+										<option value="">Select</option>
+										<option th:each="seller : ${sellers}" th:value="${seller.id}"
+											th:text="${seller.seller}">Sales Person</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Plan/Date</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="date" class="date-picker" th:field="*{pDate}" />
+									<!-- th:field="*{planDate}" -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Plan/COGS</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{pCogs}" />
+									<!-- th:field="*{planDate}" -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Plan/OPEX</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{pOpex}" />
+									<!-- th:field="*{planDate}" -->
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Provision Cost/Date</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="date" class="date-picker"
+										th:field="*{provCostDate}" />
+									<!-- th:field="*{planDate}" -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Provision Cost/COGS</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{provCostCogs}" />
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Provision Cost/OPEX</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{provCostOpex}" />
+									<!-- th:field="*{planDate}" -->
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Closing Provision/Date</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="date" class="date-picker"
+										th:field="*{closingProvisionDate}" />
+									<!-- th:field="*{planDate}" -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Closing Provision/COGS</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{closingProvisionCogs}" />
+									<!-- th:field="*{closingProvisionCogs}" -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Closing Provision/OPEX</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{closingProvisionOpex}" />
+									<!-- th:field="*{closingProvisionOpex}" -->
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Status</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<select th:field="*{status.id}"
+										style="width: 175px; height: 27px">
+										<option value=""></option>
+										<option th:each="status : ${statuses}" th:value="${status.id}"
+											th:text="${status.status}">Status</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Remaining amount/COGS</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{remAmountCogs}" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Remaining amount/OPEX</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="text" th:field="*{remAmountOpex}" />
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="submit" class="btn btn-info" value="Submit" />
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">Close</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:include="fragments/footer :: footer"></div>
+
+	<script type="text/javascript" th:inline="javascript">
+		$('input[type=date]').each(function() {
+			this.type = "text";
+		});
+
+		$(".date-picker")
+				.datepicker(
+						{
+							changeMonth : true,
+							changeYear : true,
+							showButtonPanel : true,
+							dateFormat : 'MM yy',
+							onClose : function(date, inst) {
+								var month = $(
+										"#ui-datepicker-div .ui-datepicker-month :selected")
+										.val();
+								var year = $(
+										"#ui-datepicker-div .ui-datepicker-year :selected")
+										.val();
+								$(this).datepicker('setDate',
+										new Date(year, month, 1));
+							}
+						});
+	</script>
+</body>
+</html>

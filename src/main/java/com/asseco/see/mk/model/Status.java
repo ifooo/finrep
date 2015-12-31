@@ -24,7 +24,7 @@ public class Status implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 
 	@Column(name="status")
 	private String status;
@@ -44,10 +44,15 @@ public class Status implements Serializable {
 	}
 
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(id).append(status).toHashCode();

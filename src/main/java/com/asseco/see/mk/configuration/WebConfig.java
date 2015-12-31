@@ -1,10 +1,24 @@
 package com.asseco.see.mk.configuration;
 
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -16,7 +30,9 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "com.asseco.see.mk.configuration", "com.asseco.see.mk.controller" })
+@EnableJpaRepositories(basePackages = "com.asseco.see.mk.repository")
+@EnableTransactionManagement
+@ComponentScan({ "com.asseco.see.mk.configuration", "com.asseco.see.mk.controller", "com.asseco.see.mk.service" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
@@ -45,7 +61,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public BasicDataSource dataSource() {
+	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setUrl("jdbc:postgresql://127.0.0.1:5432/fin-rep-db");
@@ -56,8 +72,46 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return dataSource;
 	}
 
+	@Bean
+	@Autowired
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource datasource,
+			JpaVendorAdapter jpaDataVendor) {
+		LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
+		Properties properties = new Properties();
+		properties.put("hibernate.hbm2ddl.auto", "update");
+		emfb.setDataSource(datasource);
+		emfb.setJpaVendorAdapter(jpaDataVendor);
+		emfb.setPackagesToScan("com.asseco.see.mk.model");
+		emfb.setJpaProperties(properties);
+		emfb.afterPropertiesSet();
+		return emfb;
+
+	}
+
+	@Bean
+	public JpaVendorAdapter jpaVendorAdapter() {
+		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+		adapter.setDatabase(Database.POSTGRESQL);
+		adapter.setShowSql(true);
+		adapter.setGenerateDdl(true);
+		adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+		return adapter;
+	}
+
+	@Bean
+	public PlatformTransactionManager transactionManager() {
+		JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+		jpaTransactionManager.setEntityManagerFactory(entityManagerFactory(dataSource(), jpaVendorAdapter()).getObject());
+		return jpaTransactionManager;
+	}
+
+	@Bean
+	public PersistenceAnnotationBeanPostProcessor paPostProcessor() {
+		return new PersistenceAnnotationBeanPostProcessor();
+	}
+
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
-	};
+	}
 }

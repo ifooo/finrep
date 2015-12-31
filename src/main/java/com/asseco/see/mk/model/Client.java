@@ -20,7 +20,7 @@ public class Client implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	@Column(name="client")
 	private String client;
@@ -35,9 +35,13 @@ public class Client implements Serializable{
 		this.client = client;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(id).append(client).toHashCode();

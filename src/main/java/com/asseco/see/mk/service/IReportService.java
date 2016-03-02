@@ -9,5 +9,7 @@ public interface IReportService {
 	void saveReport(Report report);
 	
 	List<Report> getReports();
+	
+	Report findReport(Long id);
 
 }

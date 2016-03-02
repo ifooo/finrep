@@ -8,5 +8,4 @@ public interface IReservationService {
 	void saveReservation(Reservation reservation);
 	
 	List<Reservation> getReservations();
-
 }

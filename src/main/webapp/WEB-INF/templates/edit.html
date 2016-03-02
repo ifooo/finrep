@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Financial Reporter</title>
+<link type="text/css" rel="stylesheet"
+	href="/../resources/css/bootstrap.min.css"
+	th:href="@{/resources/css/bootstrap.min.css}" />
+<link type="text/css" rel="stylesheet"
+	href="/../resources/css/jquery-ui.min.css"
+	th:href="@{/resources/css/jquery-ui.min.css}" />
+<script src="/../resources/css/jquery-1.11.3.min.js"
+	th:src="@{/resources/css/jquery-1.11.3.min.js}"></script>
+<script src="/../resources/css/bootstrap.min.js"
+	th:src="@{/resources/css/bootstrap.min.js}"></script>
+<script src="/../resources/css/jquery-ui.min.js"
+	th:src="@{/resources/css/jquery-ui.min.js}"></script>
+<script src="/../resources/css/jquery.validate.js"
+	th:src="@{/resources/css/jquery.validate.js}"></script>
+
+<script src="/../resources/css/jquery.dataTables.min.js"
+	th:src="@{/resources/css/jquery.dataTables.min.js}"></script>
+<link type="text/css" rel="stylesheet"
+	href="/../resources/css/jquery.dataTables.min.css"
+	th:href="@{/resources/css/jquery.dataTables.min.css}"></link>
+
+<script src="/../resources/css/dataTables.bootstrap.js"
+	th:src="@{/resources/css/dataTables.bootstrap.js}"></script>
+<link type="text/css" rel="stylesheet"
+	href="/../resources/css/dataTables.bootstrap.css"
+	th:href="@{/resources/css/dataTables.bootstrap.css}"></link>
+
+<script src="/../resources/css/chosen.jquery.min.js"
+	th:src="@{/resources/css/chosen.jquery.min.js}"></script>
+<link type="text/css" rel="stylesheet"
+	href="/../resources/css/chosen.min.css"
+	th:href="@{/resources/css/chosen.min.css}"></link>
+
+<script src="/../resources/css/jquery.qtip.min.js"
+	th:src="@{/resources/css/jquery.qtip.min.js}"></script>
+<link type="text/css" rel="stylesheet"
+	href="/../resources/css/jquery.qtip.min.css"
+	th:href="@{/resources/css/jquery.qtip.min.css}"></link>
+
+<style>
+body {
+	padding-top: 70px;
+	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.ui-datepicker-calendar {
+	display: none;
+}
+
+.table th {
+	text-align: center;
+}
+
+.table td {
+	text-align: center;
+}
+
+.modal-body {
+	max-weight: 1100px;
+}
+
+.chosen-container {
+	min-height: 30px;
+	height: auto !important;
+}
+</style>
+</head>
+<body>
+	<div th:include="fragments/navbar :: navigation_bar"></div>
+	<div class="container-fluid">
+
+
+		<form id="reportForm" action="#" th:action="@{/report}"
+			th:object="${report}" method="post">
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th rowspan="2">Sector</th>
+							<th rowspan="2">Client</th>
+							<th rowspan="2">Project</th>
+							<th rowspan="2">Sales Person</th>
+							<th colspan="3" rowspan="1">Plan</th>
+							<th colspan="3" rowspan="1">Provision Cost</th>
+							<th colspan="3" rowspan="1">Closing Provision</th>
+							<th rowspan="2">Status</th>
+							<th colspan="2" rowspan="1">Remaining Amount</th>
+							<th rowspan="2">Action</th>
+						</tr>
+						<tr>
+							<th>Date</th>
+							<th>COGS</th>
+							<th>Opex</th>
+							<th>Date</th>
+							<th>COGS</th>
+							<th>OPEX</th>
+							<th>Date</th>
+							<th>COGS</th>
+							<th>OPEX</th>
+							<th>COGS</th>
+							<th>OPEX</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr th:each="record,recStat : *{records}">
+							<td><div>
+									<select data-toggle="tooltip" title=""
+										th:field="*{records[__${recStat.index}__].sectorr.id}"
+										class="vallidator chosen-select">
+										<option value="" selected="selected"></option>
+										<option th:each="sector : ${sectors}" th:value="${sector.id}"
+											th:text="${sector.sector}" th:title="${sector.sector}">Thymus
+											Thymi</option>
+									</select>
+								</div></td>
+							<td><select
+								th:field="*{records[__${recStat.index}__].client.id}"
+								class="vallidator chosen-select">
+									<option value=""></option>
+									<option th:each="client : ${clients}" th:value="${client.id}"
+										th:text="${client.client}">Thymus Thymi</option>
+
+							</select></td>
+
+							<td><select
+								th:field="*{records[__${recStat.index}__].project.id}"
+								class="vallidator chosen-select">
+									<option value=""></option>
+									<option th:each="project : ${projects}"
+										th:value="${project.id}" th:text="${project.project}">Thymus
+										Thymi</option>
+							</select></td>
+
+							<td><select
+								th:field="*{records[__${recStat.index}__].seller.id}"
+								class="vallidator chosen-select">
+									<option value=""></option>
+									<option th:each="seller : ${sellers}" th:value="${seller.id}"
+										th:text="${seller.seller}">Thymus Thymi</option>
+							</select></td>
+
+							<td><input type="date"
+								class="date-picker vallidator valdate"
+								style="width: 110px; height: 20px"
+								th:field="*{records[__${recStat.index}__].pDate}" /></td>
+							<td><input type="text"
+								th:field="*{records[__${recStat.index}__].pCogs}"
+								style="width: 50px; height: 20px" class="vallidator valnum" /></td>
+							<td><input type="text"
+								th:field="*{records[__${recStat.index}__].pOpex}"
+								style="width: 50px; height: 20px" class="vallidator valnum" /></td>
+
+							<td><input type="date"
+								class="date-picker vallidator valdate"
+								style="width: 110px; height: 20px"
+								th:field="*{records[__${recStat.index}__].provCostDate}" /></td>
+							<td><input type="text" style="width: 50px; height: 20px"
+								th:field="*{records[__${recStat.index}__].provCostCogs}"
+								class="vallidator valnum"
+								th:oninput="'javascript:computeCogs(\'' + ${recStat.index} +'\');'" /></td>
+							<td><input type="text" style="width: 50px; height: 20px"
+								th:field="*{records[__${recStat.index}__].provCostOpex}"
+								class="vallidator valnum"
+								th:oninput="'javascript:computeOpex(\'' + ${recStat.index} +'\');'" /></td>
+
+							<td><input type="date"
+								class="date-picker vallidator valdate"
+								style="width: 110px; height: 20px"
+								th:field="*{records[__${recStat.index}__].closingProvisionDate}" /></td>
+							<td><input type="text" style="width: 50px; height: 20px"
+								th:field="*{records[__${recStat.index}__].closingProvisionCogs}"
+								class="vallidator valnum"
+								th:oninput="'javascript:computeCogs(\'' + ${recStat.index} +'\');'" /></td>
+							<td><input type="text" style="width: 50px; height: 20px"
+								th:field="*{records[__${recStat.index}__].closingProvisionOpex}"
+								class="vallidator valnum"
+								th:oninput="'javascript:computeOpex(\'' + ${recStat.index} +'\');'" /></td>
+
+							<td><select
+								th:field="*{records[__${recStat.index}__].status.id}"
+								style="width: 110px; height: 20px" class="vallidator">
+									<option value=""></option>
+									<option th:each="status : ${statuses}" th:value="${status.id}"
+										th:text="${status.status}">Thymus Thymi</option>
+							</select></td>
+
+							<td><input type="text" style="width: 50px; height: 20px"
+								th:field="*{records[__${recStat.index}__].remAmountCogs}"
+								class="vallidator valnum" readonly="readonly" /></td>
+							<td><input type="text" style="width: 50px; height: 20px"
+								th:field="*{records[__${recStat.index}__].remAmountOpex}"
+								class="vallidator valnum" readonly="readonly" /></td>
+
+							<td><button type="submit" name="removeRow"
+									class="btn btn-xs cancel" th:value="${recStat.index}"
+									data-toggle="tooltip"
+									title="Warning! This action permanently removes the reservation.">
+									<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+								</button></td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+
+			<button type="submit" class="btn btn-info btn-sm" name="addRow">Add
+				Reservation</button>
+			<button type="submit" class="btn btn-primary btn-sm"
+				name="saveReport" th:if="*{records.size()} &gt; 0">Save
+				Report</button>
+			<button type="submit" class="btn btn-danger btn-sm cancel"
+				name="cancel" th:if="*{records.size()} &gt; 0">Cancel</button>
+		</form>
+
+	</div>
+
+
+
+
+	<!-- Modal -->
+	<div id="warnModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			Modal content
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h2 class="modal-title">Warning!</h2>
+				</div>
+				<div class="modal-body">Are you sure?</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-info" value="Submit" />
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="fragments/footer :: footer"></div>
+	<script type="text/javascript" th:inline="javascript">
+	$('input[type=date]').each(function() {
+	    this.type = "text";
+	});
+
+	$(".date-picker")
+		.datepicker(
+			{
+			    changeMonth : true,
+			    changeYear : true,
+			    dateFormat : 'MM yy',
+			    onClose : function(date, inst) {
+				var month = $(
+					"#ui-datepicker-div .ui-datepicker-month :selected")
+					.val();
+				var year = $(
+					"#ui-datepicker-div .ui-datepicker-year :selected")
+					.val();
+				$(this).datepicker('setDate',
+					new Date(year, month, 1));
+			    }
+			});
+
+	$().ready(
+		function() {
+		    jQuery.validator.addMethod("twodecimals", function(value,
+			    element) {
+			return this.optional(element)
+				|| /^-?\d{0,20}(\.\d{2})?$/i.test(value);
+		    }, "You must include two decimal places");
+		    $.validator.setDefaults({
+			ignore : ":hidden:not(select)"
+		    })
+		    $("#reportForm").validate();
+		    $(".vallidator").each(function() {
+			$(this).rules('add', 'required');
+		    });
+		    $(".valnum").each(function() {
+			$(this).rules('add', 'number');
+			$(this).rules('add', 'twodecimals');
+		    });
+		    $(".valdate").each(function() {
+			$(this).rules('add', 'date');
+		    });
+
+		});
+
+	$(function() {
+	    $("#example").dataTable();
+	});
+
+	$(".chosen-select").chosen();
+
+	$('.chosen-select').on("chosen:showing_dropdown", function() {
+	    $(this).parents("div").css("overflow", "visible");
+	});
+
+	function computeCogs(val1) {
+	    $().ready(
+		    function() {
+			var index = val1;
+
+			var a = document.getElementById("records" + index
+				+ ".provCostCogs").value;
+
+			var b = document.getElementById("records" + index
+				+ ".closingProvisionCogs").value;
+
+			var result = a - b;
+
+			document.getElementById("records" + index
+				+ ".remAmountCogs").value = result.toFixed(2);
+		    });
+	}
+	function computeOpex(val1) {
+	    $().ready(
+		    function() {
+			var index = val1;
+
+			var a = document.getElementById("records" + index
+				+ ".provCostOpex").value;
+
+			var b = document.getElementById("records" + index
+				+ ".closingProvisionOpex").value;
+
+			var result = a - b;
+
+			document.getElementById("records" + index
+				+ ".remAmountOpex").value = result.toFixed(2);
+		    });
+	}
+    </script>
+</body>
+</html>

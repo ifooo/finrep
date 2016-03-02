@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.asseco.see.mk.model.Client;
 import com.asseco.see.mk.model.Project;
-import com.asseco.see.mk.model.Report;
 import com.asseco.see.mk.model.Reservation;
 import com.asseco.see.mk.model.Sector;
 import com.asseco.see.mk.model.Seller;
@@ -48,46 +47,47 @@ public class ReservationController {
 	@Autowired
 	private IReservationService iReservationService;
 
-//	@RequestMapping(value = "/reservation")
-//
-//	public String newReservation(Model model) {
-//		model.addAttribute("reservation", new Reservation());
-//		model.addAttribute("clients", iClientService.getClients());
-//		model.addAttribute("projects", iProjectService.getProjects());
-//		model.addAttribute("sectors", iSectorService.getSectors());
-//		model.addAttribute("sellers", iSellerService.getSellers());
-//		model.addAttribute("statuses", iStatusService.getStatuses());
-//		return "reservation";
-//	}
+	// @RequestMapping(value = "/reservation")
+	//
+	// public String newReservation(Model model) {
+	// model.addAttribute("reservation", new Reservation());
+	// model.addAttribute("clients", iClientService.getClients());
+	// model.addAttribute("projects", iProjectService.getProjects());
+	// model.addAttribute("sectors", iSectorService.getSectors());
+	// model.addAttribute("sellers", iSellerService.getSellers());
+	// model.addAttribute("statuses", iStatusService.getStatuses());
+	// return "reservation";
+	// }
 
 	@ModelAttribute("reservation")
 	public Reservation reservation() {
 		return new Reservation();
 	}
-	
+
 	@ModelAttribute("clients")
-	public List<Client> clients(){
+	public List<Client> clients() {
 		return iClientService.getClients();
 	}
-	
+
 	@ModelAttribute("projects")
-	public List<Project> projects(){
+	public List<Project> projects() {
 		return iProjectService.getProjects();
 	}
+
 	@ModelAttribute("sectors")
-	public List<Sector> sectors(){
+	public List<Sector> sectors() {
 		return iSectorService.getSectors();
 	}
+
 	@ModelAttribute("sellers")
-	public List<Seller> sellers(){
+	public List<Seller> sellers() {
 		return iSellerService.getSellers();
 	}
+
 	@ModelAttribute("statuses")
-	public List<Status> statuses(){
+	public List<Status> statuses() {
 		return iStatusService.getStatuses();
 	}
-	
-	
 
 	@RequestMapping(value = "/process_res_form", method = RequestMethod.POST)
 	public String processReservation(Reservation reservation, BindingResult result) {
@@ -118,6 +118,5 @@ public class ReservationController {
 		model.addAttribute("reservations", iReservationService.getReservations());
 		return "reservation";
 	}
-
 
 }

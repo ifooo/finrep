@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.asseco.see.mk.model.Report;
 import com.asseco.see.mk.repository.ReportRepository;
+
 @Service
 @Transactional
 public class ReportService implements IReportService {
@@ -23,6 +24,10 @@ public class ReportService implements IReportService {
 
 	public List<Report> getReports() {
 		return reportRepository.findAll();
+	}
+
+	public Report findReport(Long id) {
+		return reportRepository.findOne(id);
 	}
 
 }

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -23,6 +22,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -32,13 +32,15 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 @EnableWebMvc
 @EnableJpaRepositories(basePackages = "com.asseco.see.mk.repository")
 @EnableTransactionManagement
-@ComponentScan({ "com.asseco.see.mk.configuration", "com.asseco.see.mk.controller", "com.asseco.see.mk.service" })
+@ComponentScan(basePackages = { "com.asseco.see.mk.configuration", "com.asseco.see.mk.controller",
+		"com.asseco.see.mk.service" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	@Autowired
 	public ViewResolver viewResolver(SpringTemplateEngine templateEngine) {
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+		resolver.setCharacterEncoding("UTF-8");
 		resolver.setTemplateEngine(templateEngine);
 		return resolver;
 	}
@@ -48,12 +50,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public SpringTemplateEngine templateEngine(TemplateResolver templateResolver) {
 		SpringTemplateEngine springTemplateEngine = new SpringTemplateEngine();
 		springTemplateEngine.setTemplateResolver(templateResolver);
+		springTemplateEngine.addDialect(new SpringSecurityDialect());
 		return springTemplateEngine;
 	}
 
 	@Bean
 	public TemplateResolver templateResolver() {
 		TemplateResolver templateResolver = new ServletContextTemplateResolver();
+		templateResolver.setCharacterEncoding("UTF-8");
 		templateResolver.setPrefix("/WEB-INF/templates/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setTemplateMode("HTML5");
@@ -101,7 +105,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public PlatformTransactionManager transactionManager() {
 		JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-		jpaTransactionManager.setEntityManagerFactory(entityManagerFactory(dataSource(), jpaVendorAdapter()).getObject());
+		jpaTransactionManager
+				.setEntityManagerFactory(entityManagerFactory(dataSource(), jpaVendorAdapter()).getObject());
 		return jpaTransactionManager;
 	}
 

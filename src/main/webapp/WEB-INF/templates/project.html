@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 <meta charset="ISO-8859-1" />
 <title>Financial Reporter</title>
 <link type="text/css" rel="stylesheet"
-	href="/../../css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+	href="/../../resources/css/bootstrap.min.css"
+	th:href="@{/resources/css/bootstrap.min.css}" />
 <link type="text/css" rel="stylesheet"
-	href="/../../css/jquery-ui.min.css" th:href="@{css/jquery-ui.min.css}" />
-<script src="/../../css/jquery-1.11.3.min.js"
-	th:src="@{css/jquery-1.11.3.min.js}"></script>
-<script src="/../../css/bootstrap.min.js"
-	th:src="@{css/bootstrap.min.js}"></script>
-<script src="/../../css/jquery-ui.min.js"
-	th:src="@{css/jquery-ui.min.js}"></script>
+	href="/../../resources/css/jquery-ui.min.css"
+	th:href="@{/resources/css/jquery-ui.min.css}" />
+<script src="/../../resources/css/jquery-1.11.3.min.js"
+	th:src="@{/resources/css/jquery-1.11.3.min.js}"></script>
+<script src="/../../resources/css/bootstrap.min.js"
+	th:src="@{/resources/css/bootstrap.min.js}"></script>
+<script src="/../../resources/css/jquery-ui.min.js"
+	th:src="@{/resources/css/jquery-ui.min.js}"></script>
+<script src="/../../resources/css/jquery.dataTables.min.js"
+	th:src="@{/resources/css/jquery.dataTables.min.js}"></script>
+<link href="/../../resources/css/jquery.dataTables.min.css"
+	th:href="@{/resources/css/jquery.dataTables.min.css}"></link>
 
-
+<script src="/../../resources/css/dataTables.bootstrap.js"
+	th:src="@{/resources/css/dataTables.bootstrap.js}"></script>
+<link href="/../../resources/css/dataTables.bootstrap.css"
+	th:href="@{/resources/css/dataTables.bootstrap.css}"></link>
+<script src="/../resources/css/jquery.validate.js"
+	th:src="@{/resources/css/jquery.validate.js}"></script>
 
 <style>
 body {
@@ -25,27 +37,30 @@ body {
 </style>
 </head>
 <body>
-<div th:include="fragments/navbar :: navigation_bar"></div>
+	<div th:include="fragments/navbar :: navigation_bar"></div>
 
-	<div class="container" style="width:650px">
-		<table class="table table-striped  table-condensed"
-			style="width: auto;">
+	<div class="container">
+		<table class="table table-striped  table-condensed" id="tbl">
 			<thead>
 				<tr>
 					<th>#</th>
 					<th>Projects</th>
-					<th><button type="button" class="btn btn-info btn-sm"
-							data-toggle="modal" data-target="#projectModal">Add
-							Projects</button></th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<th:block th:each="project, index : ${projects}">
 				<tr>
-					<td th:text="${index.index+1}"></td>
+					<td th:text="${project.id}"></td>
 					<td th:text="${project.project}">A Smoke Test'</td>
+					<td><button class="btn btn-xs editButton"
+							th:id="${project.id}">
+							<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+						</button></td>
 				</tr>
 			</th:block>
 		</table>
+		<button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+			data-target="#projectModal">Add Projects</button>
 
 		<!-- Modal -->
 		<div id="projectModal" class="modal fade" role="dialog">
@@ -59,8 +74,8 @@ body {
 					</div>
 					<div class="modal-body">
 
-						<form action="#" th:action="@{/project}" th:object="${project}"
-							method="post">
+						<form id="userForm" action="#" th:action="@{/project}"
+							th:object="${project}" method="post">
 
 							<div class="row">
 								<div class="col-md-12">
@@ -69,8 +84,8 @@ body {
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<input type="text" th:field="*{project}" />
-									<!-- th:field="*{planDate}" -->
+									<input type="hidden" th:field="*{id}" /> <input type="text"
+										th:field="*{project}" />
 								</div>
 							</div>
 							<br />
@@ -87,5 +102,80 @@ body {
 
 	</div>
 	<div th:include="fragments/footer :: footer"></div>
+
+	<script type="text/javascript" th:inline="javascript">
+	$(document).ready(function() {
+
+	    $('#userForm').validate({
+		rules : {
+		    project : {
+			minlength : 2,
+			required : true
+		    }
+		}
+	    });
+	});
+	$(document)
+		.ready(
+			function() {
+			    $('.editButton')
+				    .on(
+					    'click',
+					    function() {
+						// Get the record's ID via attribute
+						var id = $(this).attr('id');
+
+						$
+							.ajax({
+							    url : 'project/',
+							    method : 'GET',
+							    data : {
+								"id" : id
+							    },
+							    dataType : 'json'
+							})
+							.success(
+								function(
+									response) {
+								    var strr = JSON
+									    .stringify(response.project);
+								    var strrid = JSON
+									    .stringify(response.id);
+								    var strid = JSON
+									    .parse(strrid);
+								    var str = JSON
+									    .parse(strr);
+								    // Populate the form fields with the data returned from server
+								    $(
+									    '#userForm')
+									    .find(
+										    '[id="id"]')
+									    .val(
+										    strid)
+									    .end()
+									    .find(
+										    '[name="project"]')
+									    .val(
+										    str)
+									    .end();
+								    // Show the dialog
+								    $(
+									    "#projectModal")
+									    .modal(
+										    'show');
+								});
+					    });
+			});
+	$('#projectModal').on('hidden.bs.modal', function() {
+	    $(this).find('[id="id"]').val('').end();
+	    $(this).find('[name="project"]').val('').end();
+	});
+	
+	$(function() {
+		$("#tbl").dataTable({
+		    stateSave: true
+		});
+	});
+    </script>
 </body>
 </html>

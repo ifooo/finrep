@@ -12,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 @Entity
 @Table(name = "records")
@@ -24,20 +27,25 @@ public class Reservation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn
+	@NotNull
 	private Client client;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn
 	private Sector sectorr;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn
 	private Project project;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn
 	private Seller seller;
@@ -46,40 +54,55 @@ public class Reservation implements Serializable {
 	@JoinColumn
 	private Status status;
 
-//	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-//	@JoinColumn
-//	private Report report;
-
+	@NotNull
 	@Column(name = "plan_date")
 	private String pDate;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "plan_cogs")
 	private float pCogs;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "plan_opex")
 	private float pOpex;
 
+	@NotNull
 	@Column(name = "provision_cost_date")
 	private String provCostDate;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "provision_cost_cogs")
 	private float provCostCogs;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "provision_cost_opex")
 	private float provCostOpex;
 
+	@NotNull
 	@Column(name = "closing_provision_date")
 	private String closingProvisionDate;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "closing_provision_cogs")
 	private float closingProvisionCogs;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "closing_provision_opex")
 	private float closingProvisionOpex;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "remaining_amount_cogs")
 	private float remAmountCogs;
 
+	@NotNull
+	@NumberFormat(style = Style.NUMBER, pattern = "#.00")
 	@Column(name = "remainig_mmount_opex")
 	private float remAmountOpex;
 
@@ -222,13 +245,13 @@ public class Reservation implements Serializable {
 		return id;
 	}
 
-//	public Report getReport() {
-//		return report;
-//	}
-//
-//	public void setReport(Report report) {
-//		this.report = report;
-//	}
+	// public Report getReport() {
+	// return report;
+	// }
+	//
+	// public void setReport(Report report) {
+	// this.report = report;
+	// }
 
 	@Override
 	public int hashCode() {

@@ -28,7 +28,7 @@ public class Report implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "reservation_name")
@@ -40,21 +40,13 @@ public class Report implements Serializable {
 	@Column(name = "date_modified")
 	private Date dateModified;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "rep_rec", joinColumns = {@JoinColumn(name = "reports_id")} , inverseJoinColumns = {@JoinColumn(name = "records_id")} )
 	private List<Reservation> records;
 
 	public Report() {
 		records = new ArrayList<Reservation>();
 	}
-	//
-	// public Report(List<Reservation> records, String name, String modifiedBy,
-	// Date dateModified){
-	// this.records = records;
-	// this.name = name;
-	// this.modifiedBy = modifiedBy;
-	// this.dateModified = dateModified;
-	// }
 
 	public String getName() {
 		return name;
